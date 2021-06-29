@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <style>
+    .navbar-heading {
+      color: #bef04a !important;
+      font-size: 2rem;
+    }
+    .display-none {
+      display: none !important;
+    }
+
+    .main-heading {
+        margin: auto; 
+        align-content: center; 
+        color: #1E6F5C;
+    }
+
+    .table-responsive {
+      max-height:300px;
+    }
+    .test::-webkit-scrollbar {
+    width: 12px;
+}
+ 
+.test::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 10px;
+}
+ 
+.test::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px #bae755; 
+}
+thead tr th {
+  position: sticky;
+  top: 0;
+}
+.test {
+  overflow: auto;
+}
+th {
+  background-color: rgb(25 27 32) !important;
+}
+
+  </style>
+</head>
+<body style="background-color: rgb(25 27 32);">
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+      <span class="navbar-heading navbar-brand mb-0 h1 ">Crypto Analyzer</span>
+    </div>
+  </nav>
+  <div class="row">
+    <div class="col-sm-6">
+      <canvas id="myChart" width= "1000%" height="600" style="background-color:rgb(25 27 32);"></canvas>
+    </div>
+    <div class="col-sm-1 d-flex flex-column justify-content-around mt-5 mb-5">
+      <button onclick="callTest('btn')" class="btn btn-outline-success">
+        <img src="../static/images/BTC.svg"  width="25" class="btn11"   height="25" alt="logo">
+        <span>
+          Bitcoin
+        </span>
+      </button>
+      <button onclick="callTest('eth')" class="btn btn-outline-primary">
+        <img src="../static/images/ETH.svg"  width="25" class="btn11"   height="25" alt="logo">
+        <span>
+          Ethereum
+        </span>
+      </button>
+      <button onclick="callTest('doge')" class="btn btn-outline-warning">
+        <img src="../static/images/DOGE.svg"  width="25" class="btn11"   height="25" alt="logo">
+        <span>
+          Doge
+        </span>
+      </button>
+      <!-- <img src="../static/images/BTC.svg"  width="25" class="btn11" onclick="callTest('btn')"  height="25" alt="logo">
+      <img src="../static/images/DOGE.svg" width="25" class="btn11" onclick="callTest('doge')"  height="25" alt="logo">
+      <img src="../static/images/ETH.svg" width="25" class="btn11" onclick="callTest('eth')"  height="25" alt="logo"> -->
+    </div>
+ 
+    
+    <div class="col-sm-5 d-flex justify-content-center">
+      <div class="d-flex flex-column">
+        <canvas id="myChart2" width= "800%" height="600" style="background-color:rgb(25 27 32);"></canvas>
+        <canvas id="myChart3" class="display-none" width= "800%" height="600" style="background-color:rgb(25 27 32);"></canvas>
+        <div class="d-flex justify-content-around">
+          <button type="button" class="btn btn-outline-success" id="swap-btn" onclick="swapChart()">Bar Graph
+          </button>
+          <!-- <button type="button" class="btn btn-outline-success" id="btn3" onclick="showChart3()">Pie</button> -->
+        </div>
+      </div>
+    </div>
+  </div>  
+
+  <div class="container mt-5 table-responsive test">
+    <!-- DOGE TABLE -->
+    <table class="table" id="doge-table" style="color: #bae755;">
+      <thead>
+        <tr>
+          {% for col in columns %}
+          <th scope="col">{{ col }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for record in records['doge'] %}
+        <tr>
+            {% for col in columns %}
+            <td>{{ record[col] }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- ETH TABLE -->
+    <table class="table display-none" id="eth-table" style="color: #bae755;">
+      <thead>
+        <tr>
+          {% for col in columns %}
+          <th scope="col">{{ col }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for record in records['eth'] %}
+        <tr>
+            {% for col in columns %}
+            <td>{{ record[col] }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+      <!-- BTC TABLE -->
+      <table class="table display-none" id="btc-table" style="color: #bae755;">
+        <thead>
+          <tr>
+            {% for col in columns %}
+            <th scope="col">{{ col }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for record in records['btc'] %}
+          <tr>
+              {% for col in columns %}
+              <td>{{ record[col] }}</td>
+              {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>   
+  <!-- <p>{{ records}}</p> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.2/chart.min.js" integrity="sha512-VCHVc5miKoln972iJPvkQrUYYq7XpxXzvqNfiul1H4aZDwGBGC0lq373KNleaB2LpnC2a/iNfE5zoRYmB4TRDQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  
+  <script>
+    const DISPLAY = true;
+    const BORDER = true;
+    const CHART_AREA = true;
+    const TICKS = true;
+
+
+    var myChart = document.getElementById('myChart').getContext("2d");
+    var lineChart = new Chart(myChart, {
+      type: "line",
+      data: {
+          labels : {{ labels | safe }} ,
+          datasets: [{
+            label: "Doge",
+            borderColor : "#bae755",
+            backgroundColor: "#ffc10766",
+            data: {{ data['DOGE-INR'] }},
+            fill: true 
+          }]
+      },
+      options: {
+          responsive: false,
+          scales: {
+            x: {
+              grid: {
+                display: DISPLAY,
+                drawBorder: BORDER,
+                color: function(context) {
+                  return '#bae75599';
+                },
+                drawOnChartArea: CHART_AREA,
+                drawTicks: TICKS,
+              }
+            },
+
+            y: {
+              grid: {
+                drawBorder: false,
+                color: function(context) {
+                  return '#bae75599';
+                },
+              },
+            }
+          }  
+        }
+
+    });
+
+
+
+    var myChart2 = document.getElementById('myChart2').getContext("2d");
+    var barchart = new Chart(myChart2, {
+      type: "bar",
+      data: {
+          labels : ["positive","negative","neutral" ],
+          datasets: [{
+            label: "Open",
+            borderColor : "#bae755",
+            backgroundColor: ['rgba(75, 192, 192, 0.5)','rgba(255, 99, 132, 0.5)','rgba(54, 162, 235, 0.5)'],
+            data: {{ scores['doge'] }},
+            fill: true 
+          }]
+      },
+      options: {
+          responsive: false,
+          scales: {
+            x: {
+              grid: {
+                display: DISPLAY,
+                drawBorder: BORDER,
+                color: function(context) {
+                  return '#bae75588';
+                },
+                drawOnChartArea: CHART_AREA,
+                drawTicks: TICKS,
+              }
+            },
+
+            y: {
+              grid: {
+                drawBorder: false,
+                color: function(context) {
+                  return '#bae75599';
+                },
+              },
+            }
+          },
+          plugins: {
+    datalabels: {
+      formatter: (value, myChart2) => {
+
+        let sum = myChart2.data.datasets[0].total;
+        let percentage = (value * 100 / sum).toFixed(2) + "%";
+        consol.log(myChart2)
+        return percentage;
+
+
+      },
+      color: '#fff',
+    }
+  }  
+        }
+
+    });
+
+
+
+    var myChart3 = document.getElementById('myChart3').getContext("2d");
+    var piechart = new Chart(myChart3, {
+      type: "pie",
+      data: {
+          labels :["positive","negative","neutral" ],
+          datasets: [{
+            label: "Open",
+            borderColor : 'rgb(25 27 32)',
+            backgroundColor:  ['rgba(75, 192, 192, 0.5)','rgba(255, 99, 132, 0.5)','rgba(54, 162, 235, 0.5)'],
+            data: {{ sentiments['doge'] }},
+            fill: true ,
+            hoverOffset: 8
+          }]
+      },
+      options: {
+          responsive: false, 
+        }
+
+    });
+
+
+
+    let element2 = document.getElementById("myChart2");
+    let element3 = document.getElementById("myChart3");
+    let swapBtn = document.getElementById("swap-btn");
+    let btn3 = document.getElementById("btn3");
+    let ethTable = document.getElementById("eth-table");
+    let btcTable = document.getElementById("btc-table");
+    let dogeTable = document.getElementById("doge-table");
+    let icon = document.getElementById('icon');
+
+    function swapChart() {
+      element2.classList.toggle("display-none");
+      element3.classList.toggle("display-none");
+      // icon.classList.toggle("fa-chart-bar");
+      // icon.classList.toggle("fa-chart-pie");
+      console.log("Before")
+      console.log(swapBtn.textContent)
+      swapBtn.textContent = swapBtn.textContent === "Bar Graph"? "Pie Chart": "Bar Graph";
+      console.log("After")
+      console.log(swapBtn.textContent)
+      //<i class="fas fa-chart-bar"></i>
+    }
+    function showChart3() {
+      btn2.disabled = false;
+      btn3.disabled = true;
+      element2.classList.add("display-none");
+      element3.classList.remove("display-none");
+    }
+    // ['DOGE-INR','ETH-INR','BTC-INR']
+    let btn11 = document.querySelector(".btn11")
+    function callTest(val) {
+      console.log(val);
+      if (val === 'eth') {
+        lineChart.data.datasets[0].data = {{ data['ETH-INR'] }};
+        lineChart.data.datasets[0].borderColor = "blue";
+        lineChart.data.datasets[0].label = "Ethereum";
+        barchart.data.datasets[0].data = {{ scores['eth'] }};
+        piechart.data.datasets[0].data = {{ sentiments['eth'] }};
+        lineChart.data.datasets[0].backgroundColor = "#6610f255"
+        ethTable.classList.remove("display-none");
+        btcTable.classList.add("display-none");
+        dogeTable.classList.add("display-none");
+      }
+      else if (val === 'btn') {
+        lineChart.data.datasets[0].backgroundColor = "rgb(30 111 92 / 40%)"
+        lineChart.data.datasets[0].borderColor = "#bae755";
+        lineChart.data.datasets[0].data = {{ data['BTC-INR'] }};
+        lineChart.data.datasets[0].label = "Bitcoin";
+        barchart.data.datasets[0].data = {{ scores['btc'] }};
+        piechart.data.datasets[0].data = {{ sentiments['btc'] }};
+        btcTable.classList.remove("display-none");
+        dogeTable.classList.add("display-none");
+        ethTable.classList.add("display-none");
+      }
+      else if (val === 'doge') {
+        lineChart.data.datasets[0].backgroundColor = "#ffc10766"
+        lineChart.data.datasets[0].borderColor = "#bae755";
+        lineChart.data.datasets[0].data = {{ data['DOGE-INR'] }};
+        lineChart.data.datasets[0].label = "Doge";
+        barchart.data.datasets[0].data = {{ scores['doge'] }};
+        piechart.data.datasets[0].data = {{ sentiments['doge'] }};
+        dogeTable.classList.remove("display-none");
+        btcTable.classList.add("display-none");
+        ethTable.classList.add("display-none");
+      }
+      lineChart.update();
+      barchart.update();
+      piechart.update();
+    }
+    console.log(lineChart.data.datasets[0].data)
+    console.log({{ scores['btc'] }})
+    console.log({{data['BTC-INR']}})
+  </script>
+  <!-- <p style="color:white;">{{ scores_og }}</p> -->
+</body>
+</html>
