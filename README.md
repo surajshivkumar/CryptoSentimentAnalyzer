@@ -1,2 +1,2 @@
 # CryptoSentimentAnalyzer
-Sentiment analysis on live tweets on crypto 
+Sentiment analysis on live crypto tweets  
